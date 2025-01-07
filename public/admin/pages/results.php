@@ -79,7 +79,7 @@ $displayResults = [];
 $ruleTotals = [];
 if ($selectedPod) {
     $stmt = $pdo->prepare("
-        SELECT u.first_name, u.last_name, ds.rule_id, ds.score, cr.emoji
+        SELECT u.first_name, u.last_name, ds.rule_id, ds.score, cr.emoji, cr.points
         FROM users u
         LEFT JOIN daily_scores ds ON u.id = ds.user_id AND ds.date = ? AND ds.pod_id = ?
         LEFT JOIN competition_rules cr ON ds.rule_id = cr.id
@@ -97,16 +97,17 @@ if ($selectedPod) {
         if (isset($result['emoji'])) {
             $displayResults[$name]['emojis'] .= str_repeat($result['emoji'], $result['score']);
         }
-        if (isset($result['score'])) {
-            $displayResults[$name]['total'] += $result['score'];
+        if (isset($result['score']) && isset($result['points'])) {
+            // Multiply score (times achieved) by points value for the rule
+            $displayResults[$name]['total'] += ($result['score'] * $result['points']);
         }
-
+    
         // Calculate rule totals
         if (isset($result['rule_id']) && isset($result['score'])) {
             if (!isset($ruleTotals[$result['rule_id']])) {
                 $ruleTotals[$result['rule_id']] = 0;
             }
-            $ruleTotals[$result['rule_id']] += $result['score'];
+            $ruleTotals[$result['rule_id']] += ($result['score'] * ($result['points'] ?? 1));
         }
     }
 }
