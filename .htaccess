@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Allow direct access to assets
+    RewriteCond %{REQUEST_URI} ^/(public|assets)/ [NC]
+    RewriteRule ^ - [L]
+    
+    # Redirect admin requests
+    RewriteRule ^admin(/.*)?$ public/admin$1 [L]
+    
+    # Redirect everything else to public
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
