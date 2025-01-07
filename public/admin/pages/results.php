@@ -77,6 +77,7 @@ if ($selectedPod && !empty($results)) {
 // Initialize displayResults and ruleTotals
 $displayResults = [];
 $ruleTotals = [];
+$ruleCounts = []; // New array to count rule achievements
 if ($selectedPod) {
     $stmt = $pdo->prepare("
         SELECT u.first_name, u.last_name, ds.rule_id, ds.score, cr.emoji, cr.points
@@ -101,13 +102,19 @@ if ($selectedPod) {
             // Multiply score (times achieved) by points value for the rule
             $displayResults[$name]['total'] += ($result['score'] * $result['points']);
         }
-    
+
         // Calculate rule totals
         if (isset($result['rule_id']) && isset($result['score'])) {
             if (!isset($ruleTotals[$result['rule_id']])) {
                 $ruleTotals[$result['rule_id']] = 0;
             }
             $ruleTotals[$result['rule_id']] += ($result['score'] * ($result['points'] ?? 1));
+
+            // Calculate rule counts
+            if (!isset($ruleCounts[$result['rule_id']])) {
+                $ruleCounts[$result['rule_id']] = 0;
+            }
+            $ruleCounts[$result['rule_id']] += $result['score'];
         }
     }
 }
@@ -271,7 +278,7 @@ if ($selectedPod) {
                                 $rule1Name = $rules[array_search($selectedRule1, array_column($rules, 'id'))]['name'];
                                 $targetDisplay[] = sprintf("%s: %d/%d",
                                     htmlspecialchars($rule1Name),
-                                    ($ruleTotals[$selectedRule1] ?? 0),
+                                    ($ruleCounts[$selectedRule1] ?? 0), // Use ruleCounts for achievements
                                     $target1
                                 );
                             }
@@ -279,7 +286,7 @@ if ($selectedPod) {
                                 $rule2Name = $rules[array_search($selectedRule2, array_column($rules, 'id'))]['name'];
                                 $targetDisplay[] = sprintf("%s: %d/%d",
                                     htmlspecialchars($rule2Name),
-                                    ($ruleTotals[$selectedRule2] ?? 0),
+                                    ($ruleCounts[$selectedRule2] ?? 0), // Use ruleCounts for achievements
                                     $target2
                                 );
                             }
