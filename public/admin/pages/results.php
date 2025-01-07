@@ -93,7 +93,7 @@ if ($selectedPod) {
             $displayResults[$name] = ['emojis' => '', 'total' => 0];
         }
         if (isset($result['emoji'])) {
-            $displayResults[$name]['emojis'] .= $result['emoji'];
+            $displayResults[$name]['emojis'] .= str_repeat($result['emoji'], $result['score']);
         }
         if (isset($result['score'])) {
             $displayResults[$name]['total'] += $result['score'];
