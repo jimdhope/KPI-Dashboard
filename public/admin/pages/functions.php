@@ -539,7 +539,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         exit;
     }
 }
-// Add Weekly Scores functions
 
 function getPodTargets($podId, $selectedRules = []) {
     global $db;
@@ -547,9 +546,11 @@ function getPodTargets($podId, $selectedRules = []) {
         SELECT pt.*, cr.name as rule_name, cr.emoji 
         FROM pod_targets pt
         JOIN competition_rules cr ON pt.rule_id = cr.id
-        WHERE pt.pod_id = ? AND pt.rule_id IN (?)";
+        WHERE pt.pod_id = ? AND pt.rule_id IN (" . implode(',', array_fill(0, count($selectedRules), '?')) . ")";
     
-    return $db->query($query, [$podId, implode(',', $selectedRules)])->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $db->prepare($query);
+    $stmt->execute(array_merge([$podId], $selectedRules));
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Update the target update handler
@@ -569,10 +570,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $stmt->execute([$podId, $date]);
         
         // Insert new targets with date
-        $stmt = $db->prepare("
-            INSERT INTO pod_targets (pod_id, rule_id, target_value, date) 
-            VALUES (?, ?, ?, ?)
-        ");
+        $stmt = $db->prepare("INSERT INTO pod_targets (pod_id, rule_id, target_value, date) VALUES (?, ?, ?, ?)");
         
         if ($rule1Id && $target1 !== null) {
             $stmt->execute([$podId, $rule1Id, $target1, $date]);

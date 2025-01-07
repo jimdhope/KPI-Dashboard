@@ -7,6 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/public/admin/includes/header.php';
 
 // Initialize variables
 $db = Database::getInstance();
+$pdo = $db->getConnection(); // Ensure this returns a PDO instance
 $pageTitle = 'Daily Results';
 
 // Get selections
@@ -16,12 +17,14 @@ $selectedPod = $_GET['pod'] ?? '';
 // Get saved targets first
 $savedTargets = [];
 if ($selectedPod) {
-    $savedTargets = $db->query("
+    $stmt = $pdo->prepare("
         SELECT pt.rule_id, pt.target_value, cr.name as rule_name
         FROM pod_targets pt
         JOIN competition_rules cr ON pt.rule_id = cr.id
-        WHERE pt.pod_id = ?", 
-        [$selectedPod])->fetchAll(PDO::FETCH_ASSOC);
+        WHERE pt.pod_id = ? AND pt.date = ?
+    ");
+    $stmt->execute([$selectedPod, $selectedDate]);
+    $savedTargets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Set default selections from saved targets
     if (!empty($savedTargets)) {
@@ -37,139 +40,71 @@ if ($selectedPod) {
     }
 }
 
-// Only save if target values have been explicitly set
-if ($selectedPod && (isset($_GET['target1']) || isset($_GET['target2']))) {
-    $dbConnection = $db->getConnection();
-    $stmt = $dbConnection->prepare("
-        INSERT INTO pod_targets (pod_id, rule_id, target_value, date)
-        VALUES (?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE target_value = VALUES(target_value), date = VALUES(date)
-    ");
-    
-    if ($selectedRule1 && isset($_GET['target1'])) {
-        $stmt->execute([$selectedPod, $selectedRule1, $target1, $selectedDate]);
-    }
-    if ($selectedRule2 && isset($_GET['target2'])) {
-        $stmt->execute([$selectedPod, $selectedRule2, $target2, $selectedDate]);
-    }
-}
-
 // Fetch pods for dropdown
-$pods = $db->query("SELECT * FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+$pods = $pdo->query("SELECT * FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch all rules for dropdowns and key
-$rules = $db->query("
-    SELECT DISTINCT cr.* 
-    FROM competition_rules cr
-    JOIN daily_scores ds ON cr.id = ds.rule_id
-    WHERE ds.pod_id = ?", 
-    [$selectedPod])->fetchAll(PDO::FETCH_ASSOC);
+$rules = $pdo->query("SELECT * FROM competition_rules ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 
 // Get all pod members first
+$results = [];
 if ($selectedPod) {
-    $podMembers = $db->query("
-        SELECT DISTINCT
-            u.id,
-            u.first_name
+    $stmt = $pdo->prepare("
+        SELECT u.id, u.first_name, u.last_name, ds.score, ds.rule_id
         FROM users u
-        JOIN pod_assignments pa ON u.id = pa.staff_id
-        WHERE pa.pod_id = ?
-        ORDER BY u.first_name",
-        [$selectedPod]
-    )->fetchAll(PDO::FETCH_ASSOC);
-
-    // Get scores separately
-    $scores = $db->query("
-        SELECT 
-            u.id,
-            u.first_name,
-            cr.emoji,
-            cr.points,
-            ds.score,
-            COALESCE((ds.score * cr.points), 0) as total_points,
-            ds.rule_id
-        FROM users u
-        JOIN pod_assignments pa ON u.id = pa.staff_id
-        LEFT JOIN daily_scores ds ON (u.id = ds.user_id AND ds.date = ?)
-        LEFT JOIN competition_rules cr ON ds.rule_id = cr.id
-        WHERE pa.pod_id = ? AND ds.score > 0",
-        [$selectedDate, $selectedPod]
-    )->fetchAll(PDO::FETCH_ASSOC);
-
-    // Initialize display results for all members
-    $displayResults = [];
-    foreach ($podMembers as $member) {
-        $displayResults[$member['first_name']] = [
-            'emojis' => '',
-            'total' => 0
-        ];
-    }
-
-    // Add scores where they exist
-    foreach ($scores as $row) {
-        $name = $row['first_name'];
-        if (!empty($row['emoji']) && !empty($row['score'])) {
-            $displayResults[$name]['emojis'] .= str_repeat($row['emoji'], $row['score']);
-            $displayResults[$name]['total'] += $row['total_points'];
-        }
-    }
-
-    // Calculate rule totals
-    $ruleTotals = [];
-    foreach ($scores as $row) {
-        if (!empty($row['rule_id'])) {
-            if (!isset($ruleTotals[$row['rule_id']])) {
-                $ruleTotals[$row['rule_id']] = 0;
-            }
-            $ruleTotals[$row['rule_id']] += (int)$row['score'];
-        }
-    }
+        LEFT JOIN daily_scores ds ON u.id = ds.user_id AND ds.date = ? AND ds.pod_id = ?
+        WHERE u.id IN (SELECT staff_id FROM pod_assignments WHERE pod_id = ?)
+    ");
+    $stmt->execute([$selectedDate, $selectedPod, $selectedPod]);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Format content for Teams
 $teamsFormattedContent = '';
 if ($selectedPod && !empty($results)) {
-    // Rules Key Header
-    $teamsFormattedContent .= "Competition Results\r\n\r\n";
-    foreach ($rules as $rule) {
-        $teamsFormattedContent .= str_pad($rule['emoji'] . ' ' . $rule['name'], 25) . 
-                                 '(' . $rule['points'] . ' pts) | ';
+    foreach ($results as $result) {
+        $score1 = isset($result['score']) && $result['rule_id'] == $selectedRule1 ? $result['score'] : '';
+        $score2 = isset($result['score']) && $result['rule_id'] == $selectedRule2 ? $result['score'] : '';
+        $teamsFormattedContent .= "<tr>
+            <td>{$result['first_name']} {$result['last_name']}</td>
+            <td><input type='number' name='scores[{$result['id']}][{$selectedRule1}]' value='{$score1}'></td>
+            <td><input type='number' name='scores[{$result['id']}][{$selectedRule2}]' value='{$score2}'></td>
+        </tr>";
     }
-    $teamsFormattedContent = rtrim($teamsFormattedContent, " | ") . "\r\n\r\n";
+}
 
-    // Create HTML table
-    $teamsFormattedContent .= "<table>\n";
-    
-    // Table Header
-    $teamsFormattedContent .= "<tr>\n";
-    $teamsFormattedContent .= "<td width='150'>Name</td>\n";
-    $teamsFormattedContent .= "<td width='400'>Wins</td>\n";
-    $teamsFormattedContent .= "<td width='100'>Points</td>\n";
-    $teamsFormattedContent .= "</tr>\n";
-    
-    // Table Content
-    foreach ($displayResults as $name => $data) {
-        $teamsFormattedContent .= "<tr>\n";
-        $teamsFormattedContent .= "<td>" . $name . "</td>\n";
-        $teamsFormattedContent .= "<td>" . $data['emojis'] . "</td>\n";
-        $teamsFormattedContent .= "<td>" . $data['total'] . "</td>\n";
-        $teamsFormattedContent .= "</tr>\n";
-    }
-    
-    $teamsFormattedContent .= "</table>\n";
+// Initialize displayResults and ruleTotals
+$displayResults = [];
+$ruleTotals = [];
+if ($selectedPod) {
+    $stmt = $pdo->prepare("
+        SELECT u.first_name, u.last_name, ds.rule_id, ds.score, cr.emoji
+        FROM users u
+        LEFT JOIN daily_scores ds ON u.id = ds.user_id AND ds.date = ? AND ds.pod_id = ?
+        LEFT JOIN competition_rules cr ON ds.rule_id = cr.id
+        WHERE u.id IN (SELECT staff_id FROM pod_assignments WHERE pod_id = ?)
+    ");
+    $stmt->execute([$selectedDate, $selectedPod, $selectedPod]);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Targets Footer
-    if ($selectedRule1 || $selectedRule2) {
-        $teamsFormattedContent .= "\r\nDaily Targets:\r\n";
-        if ($selectedRule1) {
-            $ruleName = $rules[array_search($selectedRule1, array_column($rules, 'id'))]['name'];
-            $teamsFormattedContent .= str_pad($ruleName . ": " . 
-                                    $ruleTotals[$selectedRule1] . "/" . $target1, 30) . "\r\n";
+    foreach ($results as $result) {
+        $name = "{$result['first_name']} {$result['last_name']}";
+        if (!isset($displayResults[$name])) {
+            $displayResults[$name] = ['emojis' => '', 'total' => 0];
         }
-        if ($selectedRule2) {
-            $ruleName = $rules[array_search($selectedRule2, array_column($rules, 'id'))]['name'];
-            $teamsFormattedContent .= str_pad($ruleName . ": " . 
-                                    $ruleTotals[$selectedRule2] . "/" . $target2, 30) . "\r\n";
+        if (isset($result['emoji'])) {
+            $displayResults[$name]['emojis'] .= $result['emoji'];
+        }
+        if (isset($result['score'])) {
+            $displayResults[$name]['total'] += $result['score'];
+        }
+
+        // Calculate rule totals
+        if (isset($result['rule_id']) && isset($result['score'])) {
+            if (!isset($ruleTotals[$result['rule_id']])) {
+                $ruleTotals[$result['rule_id']] = 0;
+            }
+            $ruleTotals[$result['rule_id']] += $result['score'];
         }
     }
 }
@@ -186,16 +121,14 @@ if ($selectedPod && !empty($results)) {
             <form id="selectionForm" method="GET" class="row g-3">
                 <div class="col-md-6">
                     <label for="date" class="form-label">Date</label>
-                    <input type="date" id="date" name="date" class="form-control" 
-                        value="<?php echo htmlspecialchars($selectedDate); ?>">
+                    <input type="date" id="date" name="date" class="form-control" value="<?php echo htmlspecialchars($selectedDate); ?>">
                 </div>
                 <div class="col-md-6">
                     <label for="pod" class="form-label">Pod</label>
                     <select id="pod" name="pod" class="form-select">
                         <option value="">Select Pod</option>
                         <?php foreach ($pods as $pod): ?>
-                            <option value="<?php echo $pod['id']; ?>" 
-                                <?php echo ($selectedPod == $pod['id']) ? 'selected' : ''; ?>>
+                            <option value="<?php echo $pod['id']; ?>" <?php echo ($selectedPod == $pod['id']) ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($pod['name']); ?>
                             </option>
                         <?php endforeach; ?>
@@ -210,7 +143,7 @@ if ($selectedPod && !empty($results)) {
         <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title">Target Settings</h5>
-                <form id="targetForm" method="POST" action="/path/to/functions.php">
+                <form id="targetForm" method="POST" action="functions.php">
                     <input type="hidden" name="action" value="update_targets">
                     <input type="hidden" name="pod_id" value="<?php echo $selectedPod; ?>">
                     <input type="hidden" name="date" value="<?php echo $selectedDate; ?>">
@@ -224,15 +157,12 @@ if ($selectedPod && !empty($results)) {
                                         <select name="rule1" class="form-select">
                                             <option value="">Select Rule</option>
                                             <?php foreach ($rules as $rule): ?>
-                                                <option value="<?php echo $rule['id']; ?>" 
-                                                    <?php echo ($selectedRule1 == $rule['id']) ? 'selected' : ''; ?>>
+                                                <option value="<?php echo $rule['id']; ?>" <?php echo ($selectedRule1 == $rule['id']) ? 'selected' : ''; ?>>
                                                     <?php echo $rule['emoji'] . ' ' . htmlspecialchars($rule['name']); ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
-                                        <input type="number" name="target1" class="form-control" 
-                                            placeholder="Target" 
-                                            value="<?php echo $target1 !== null ? $target1 : ''; ?>">
+                                        <input type="number" name="target1" class="form-control" placeholder="Target" value="<?php echo $target1 !== null ? $target1 : ''; ?>">
                                     </div>
                                 </div>
                             </div>
@@ -246,15 +176,12 @@ if ($selectedPod && !empty($results)) {
                                         <select name="rule2" class="form-select">
                                             <option value="">Select Rule</option>
                                             <?php foreach ($rules as $rule): ?>
-                                                <option value="<?php echo $rule['id']; ?>" 
-                                                    <?php echo ($selectedRule2 == $rule['id']) ? 'selected' : ''; ?>>
+                                                <option value="<?php echo $rule['id']; ?>" <?php echo ($selectedRule2 == $rule['id']) ? 'selected' : ''; ?>>
                                                     <?php echo $rule['emoji'] . ' ' . htmlspecialchars($rule['name']); ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
-                                        <input type="number" name="target2" class="form-control" 
-                                            placeholder="Target" 
-                                            value="<?php echo $target2 !== null ? $target2 : ''; ?>">
+                                        <input type="number" name="target2" class="form-control" placeholder="Target" value="<?php echo $target2 !== null ? $target2 : ''; ?>">
                                     </div>
                                 </div>
                             </div>
@@ -264,32 +191,6 @@ if ($selectedPod && !empty($results)) {
                         </div>
                     </div>
                 </form>
-
-                <!-- Add target totals display div -->
-                <!--
-                <div id="targetTotals" class="mt-3">
-                   <?php if ($selectedRule1 || $selectedRule2): ?>
-                        <?php 
-                        $targetDisplay = [];
-                        if ($selectedRule1) {
-                            $targetDisplay[] = sprintf("%s: %d/%d",
-                                htmlspecialchars($rules[array_search($selectedRule1, array_column($rules, 'id'))]['name']),
-                                ($ruleTotals[$selectedRule1] ?? 0),
-                                $target1
-                            );
-                        }
-                        if ($selectedRule2) {
-                            $targetDisplay[] = sprintf("%s: %d/%d",
-                                htmlspecialchars($rules[array_search($selectedRule2, array_column($rules, 'id'))]['name']),
-                                ($ruleTotals[$selectedRule2] ?? 0),
-                                $target2
-                            );
-                        }
-                        echo implode(' | ', $targetDisplay);
-                        ?>
-                    <?php endif; ?>
-                </div>
-                -->
 
                 <script>
                 document.getElementById('targetForm').addEventListener('submit', function(e) {
