@@ -54,6 +54,7 @@ if ($selectedPod) {
         FROM users u
         LEFT JOIN daily_scores ds ON u.id = ds.user_id AND ds.date = ? AND ds.pod_id = ?
         WHERE u.id IN (SELECT staff_id FROM pod_assignments WHERE pod_id = ?)
+        ORDER BY u.first_name ASC
     ");
     $stmt->execute([$selectedDate, $selectedPod, $selectedPod]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -83,6 +84,7 @@ if ($selectedPod) {
         LEFT JOIN daily_scores ds ON u.id = ds.user_id AND ds.date = ? AND ds.pod_id = ?
         LEFT JOIN competition_rules cr ON ds.rule_id = cr.id
         WHERE u.id IN (SELECT staff_id FROM pod_assignments WHERE pod_id = ?)
+        ORDER BY u.first_name ASC
     ");
     $stmt->execute([$selectedDate, $selectedPod, $selectedPod]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
