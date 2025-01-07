@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/bootstrap.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/public/admin/includes/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/public/admin/pages/functions.php'; // Include functions.php
 
 function getCompetitionTeams($db, $competitionId) {
     $stmt = $db->prepare("SELECT id FROM teams WHERE competition_id = ?");
@@ -76,10 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['random_assign'])) {
 
 // Initialize variables
 $db = Database::getInstance();
+$pdo = $db->getConnection(); // Ensure this returns a PDO instance
 $pageTitle = 'Teams';
 
 // Get all competitions
-$competitions = $db->query("SELECT * FROM competitions ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+$competitions = $pdo->query("SELECT * FROM competitions ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 
 // After getting competitions, add filter handling
 $selectedCompetition = isset($_GET['filterCompetition']) ? intval($_GET['filterCompetition']) : null;
@@ -106,7 +108,9 @@ $teamsQuery .= " GROUP BY t.id, t.name, t.competition_id, c.name ORDER BY c.name
 error_log("Teams Query: " . $teamsQuery);
 error_log("Params: " . print_r($params, true));
 
-$teams = $db->query($teamsQuery, $params)->fetchAll(PDO::FETCH_ASSOC);
+$teams = $pdo->prepare($teamsQuery);
+$teams->execute($params);
+$teams = $teams->fetchAll(PDO::FETCH_ASSOC);
 
 // Initialize variables for the form
 $teamName = '';
@@ -115,14 +119,15 @@ $action = 'Add Team'; // Default action
 // Check if an edit is requested
 if (isset($_GET['edit_id'])) {
     $editId = intval($_GET['edit_id']);
-    $team = $db->query("SELECT * FROM teams WHERE id = ?", [$editId])->fetch(PDO::FETCH_ASSOC);
+    $team = $pdo->prepare("SELECT * FROM teams WHERE id = ?");
+    $team->execute([$editId]);
+    $team = $team->fetch(PDO::FETCH_ASSOC);
     
     if ($team) {
         $teamName = htmlspecialchars($team['name'] ?? '');
         $action = 'Edit Team'; // Change action to Edit
     }
 }
-
 
 // Display success or error messages
 if (isset($_GET['message'])) {
@@ -181,7 +186,7 @@ if (isset($_GET['error'])) {
                             <select name="pod_id" class="form-select" required>
                                 <option value="">Choose Pod...</option>
                                 <?php
-                                $pods = $db->query("SELECT id, name FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+                                $pods = $pdo->query("SELECT id, name FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($pods as $pod) {
                                     echo "<option value='{$pod['id']}'>{$pod['name']}</option>";
                                 }
@@ -247,7 +252,7 @@ if (isset($_GET['error'])) {
                                 <select id="assignPod" name="pod_id" class="form-select" required>
                                     <option value="">Select Pod</option>
                                     <?php 
-                                    $pods = $db->query("SELECT * FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+                                    $pods = $pdo->query("SELECT * FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($pods as $pod): 
                                     ?>
                                         <option value="<?php echo $pod['id']; ?>">
@@ -394,17 +399,23 @@ if (isset($_GET['error'])) {
                                             class="btn btn-sm btn-link text-danger">Remove</button>
                                 </div>
                             </div>
-                            <?php if ($team['members']): ?>
+                            <?php 
+                            $teamMembers = getTeamMembers($pdo, $team['id']);
+                            if (!empty($teamMembers)): ?>
                                 <div class="team-members ps-3">
-                                    <?php 
-                                    $members = explode(', ', $team['members']);
-                                    foreach ($members as $member): ?>
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <p class="mb-0"><?php echo htmlspecialchars($member); ?></p>
-                                            <button onclick="removeMember(<?php echo $team['id']; ?>, '<?php echo htmlspecialchars($member); ?>')" 
-                                                    class="btn btn-sm btn-link text-danger p-0">Remove</button>
-                                        </div>
-                                    <?php endforeach; ?>
+                                    <ul>
+                                        <?php foreach ($teamMembers as $member): ?>
+                                            <li style="display: flex; justify-content: space-between; align-items: center;">
+                                                <?php echo htmlspecialchars($member['first_name'] . ' ' . $member['last_name']); ?>
+                                                <form method="POST" action="functions.php" style="display:inline;">
+                                                    <input type="hidden" name="action" value="remove_team_member">
+                                                    <input type="hidden" name="team_id" value="<?php echo $team['id']; ?>">
+                                                    <input type="hidden" name="user_id" value="<?php echo $member['id']; ?>">
+                                                    <button type="submit" class="text-danger" style="background: none; border: none; padding: 0; cursor: pointer;">Remove</button>
+                                                </form>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
                                 </div>
                             <?php endif; ?>
                         </div>

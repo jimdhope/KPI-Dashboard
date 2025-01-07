@@ -199,6 +199,13 @@ if (isset($_GET['pod_id'])) {
     exit();
 }
 
+function getTeamMembers($pdo, $teamId) {
+    $stmt = $pdo->prepare("SELECT users.id, users.first_name, users.last_name FROM users 
+                          JOIN user_team ON users.id = user_team.user_id 
+                          WHERE user_team.team_id = ?");
+    $stmt->execute([$teamId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 try {
     // Check if the form is submitted for assigning users to teams
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['team_id']) && isset($_POST['person_ids'])) {
@@ -232,25 +239,16 @@ try {
     exit();
 }
 
-// Add after existing POST handlers
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && 
-    isset($_POST['action']) && $_POST['action'] === 'remove_user_from_team' &&
-    isset($_POST['team_id']) && isset($_POST['user_id'])) {
-    
-    try {
-        $teamId = intval($_POST['team_id']);
-        $userId = intval($_POST['user_id']);
-        
-        $stmt = $db->prepare("DELETE FROM user_team WHERE team_id = ? AND user_id = ?");
-        $stmt->execute([$teamId, $userId]);
-        
-        header("Location: /public/admin/pages/teams.php?message=User removed from team successfully");
-        exit();
-    } catch (PDOException $e) {
-        error_log("Error removing user from team: " . $e->getMessage());
-        header("Location: /public/admin/pages/teams.php?error=Failed to remove user from team");
-        exit();
-    }
+// Handle team member removal
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'remove_team_member') {
+    $teamId = intval($_POST['team_id']);
+    $userId = intval($_POST['user_id']);
+
+    $stmt = $db->prepare("DELETE FROM user_team WHERE team_id = ? AND user_id = ?");
+    $stmt->execute([$teamId, $userId]);
+
+    header("Location: /public/admin/pages/teams.php?message=Member removed successfully");
+    exit();
 }
 
 // Add this handler after existing POST handlers
