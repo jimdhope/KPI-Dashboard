@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/bootstrap.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/public/admin/pages/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/public/admin/pages/weekly_scores/functions.php';
 
 // Define page title before header include
 $pageTitle = 'Weekly Scores';
@@ -142,6 +142,36 @@ try {
                 </div>
             </div>
         </div>
+
+        <!-- Certificates Column -->
+        <div class="col-md-6">
+            <div class="card weekly-scorecard">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Certificates</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/public/admin/pages/certs/functions.php">
+                <input type="hidden" name="pod_id" value="<?php echo htmlspecialchars($selectedPod); ?>">
+                <input type="hidden" name="competition_id" value="<?php echo htmlspecialchars($selectedCompetition); ?>">
+                <div class="mb-3">
+                    <label for="team_manager" class="form-label">Team Manager</label>
+                    <input type="text" class="form-control" id="team_manager" name="team_manager" required>
+                </div>
+                <div class="mb-3">
+                    <label for="certificate_type" class="form-label">Certificate Type</label>
+                    <select class="form-select" id="certificate_type" name="certificate_type" required>
+                    <option value="1st">1st Place</option>
+                    <option value="2nd">2nd Place</option>
+                    <option value="3rd">3rd Place</option>
+                    <option value="team">Winning Team</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Certificate</button>
+                </form>
+            </div>
+            </div>
+        </div>
+
     </div>
     <?php endif; ?>
 </div>

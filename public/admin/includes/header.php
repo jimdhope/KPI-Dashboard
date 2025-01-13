@@ -47,7 +47,7 @@
                     <div class="nav-link fw-bold mb-2">Scorecards</div>
                     <ul class="list-unstyled ms-3">
                         <li><a class="nav-link" href="/public/admin/pages/results.php">Daily Scorecard</a></li>
-                        <li><a class="nav-link" href="/public/admin/pages/weekly_scores.php">Weekly Scorecard</a></li>
+                        <li><a class="nav-link" href="/public/admin/pages/weekly_scores/weekly_scores.php">Weekly Scorecard</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
