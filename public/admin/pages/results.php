@@ -13,6 +13,18 @@ $pageTitle = 'Daily Results';
 // Get selections
 $selectedDate = $_GET['date'] ?? date('Y-m-d');
 $selectedPod = $_GET['pod'] ?? '';
+$selectedCompetition = $_GET['competition'] ?? '';
+
+// Fetch pods for dropdown
+$pods = $pdo->query("SELECT * FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch competitions for dropdown based on selected pod
+$competitions = [];
+if ($selectedPod) {
+    $stmt = $pdo->prepare("SELECT * FROM competitions WHERE id IN (SELECT competition_id FROM teams WHERE id IN (SELECT team_id FROM user_team WHERE user_id IN (SELECT staff_id FROM pod_assignments WHERE pod_id = ?))) ORDER BY start_date DESC");
+    $stmt->execute([$selectedPod]);
+    $competitions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 // Get saved targets first
 $savedTargets = [];
@@ -40,11 +52,13 @@ if ($selectedPod) {
     }
 }
 
-// Fetch pods for dropdown
-$pods = $pdo->query("SELECT * FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch all rules for dropdowns and key
-$rules = $pdo->query("SELECT * FROM competition_rules ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+// Fetch all rules for dropdowns and key based on selected competition
+$rules = [];
+if ($selectedCompetition) {
+    $stmt = $pdo->prepare("SELECT * FROM competition_rules WHERE competition_id = ? ORDER BY name");
+    $stmt->execute([$selectedCompetition]);
+    $rules = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 // Get all pod members first
 $results = [];
@@ -125,17 +139,17 @@ if ($selectedPod) {
 <div class="container py-5">
     <h1 class="mb-4" style="color: #eeeeee;">Daily Scorecard</h1>
 
-    <!-- Date and Pod Selectors - Moved outside selectedPod condition -->
+    <!-- Date, Pod, and Competition Selectors -->
     <div class="card mb-4">
         <div class="card-body">
             <form id="selectionForm" method="GET" class="row g-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="date" class="form-label">Date</label>
                     <input type="date" id="date" name="date" class="form-control" value="<?php echo htmlspecialchars($selectedDate); ?>">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="pod" class="form-label">Pod</label>
-                    <select id="pod" name="pod" class="form-select">
+                    <select id="pod" name="pod" class="form-select" onchange="this.form.submit()">
                         <option value="">Select Pod</option>
                         <?php foreach ($pods as $pod): ?>
                             <option value="<?php echo $pod['id']; ?>" <?php echo ($selectedPod == $pod['id']) ? 'selected' : ''; ?>>
@@ -144,11 +158,22 @@ if ($selectedPod) {
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <div class="col-md-4">
+                    <label for="competition" class="form-label">Competition</label>
+                    <select id="competition" name="competition" class="form-select" onchange="this.form.submit()">
+                        <option value="">Select Competition</option>
+                        <?php foreach ($competitions as $competition): ?>
+                            <option value="<?php echo $competition['id']; ?>" <?php echo ($selectedCompetition == $competition['id']) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($competition['name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </form>
         </div>
     </div>
 
-    <?php if ($selectedPod): ?>
+    <?php if ($selectedPod && $selectedCompetition): ?>
         <!-- Target Settings Card -->
         <div class="card mb-4">
             <div class="card-body">
@@ -168,7 +193,7 @@ if ($selectedPod) {
                                             <option value="">Select Rule</option>
                                             <?php foreach ($rules as $rule): ?>
                                                 <option value="<?php echo $rule['id']; ?>" <?php echo ($selectedRule1 == $rule['id']) ? 'selected' : ''; ?>>
-                                                    <?php echo $rule['emoji'] . ' ' . htmlspecialchars($rule['name']); ?>
+                                                    <?php echo htmlspecialchars($rule['name']); ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
@@ -187,7 +212,7 @@ if ($selectedPod) {
                                             <option value="">Select Rule</option>
                                             <?php foreach ($rules as $rule): ?>
                                                 <option value="<?php echo $rule['id']; ?>" <?php echo ($selectedRule2 == $rule['id']) ? 'selected' : ''; ?>>
-                                                    <?php echo $rule['emoji'] . ' ' . htmlspecialchars($rule['name']); ?>
+                                                    <?php echo htmlspecialchars($rule['name']); ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
@@ -201,43 +226,6 @@ if ($selectedPod) {
                         </div>
                     </div>
                 </form>
-
-                <script>
-                document.getElementById('targetForm').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const formData = new FormData(this);
-                    
-                    fetch('functions.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Show success message
-                            alert('Targets saved successfully');
-                            // Reload page with current selections
-                            const currentUrl = new URL(window.location.href);
-                            currentUrl.searchParams.set('date', document.getElementById('date').value);
-                            currentUrl.searchParams.set('pod', document.getElementById('pod').value);
-                            window.location.href = currentUrl.toString();
-                        } else {
-                            alert('Failed to save targets: ' + (data.error || 'Unknown error'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Failed to save targets');
-                    });
-                });
-
-                // Auto-submit selection form when changes occur
-                document.querySelectorAll('#selectionForm select, #selectionForm input').forEach(element => {
-                    element.addEventListener('change', function() {
-                        document.getElementById('selectionForm').submit();
-                    });
-                });
-                </script>
             </div>
         </div>
 
@@ -249,7 +237,10 @@ if ($selectedPod) {
                     <div class="rules-key mb-3">
                         <?php foreach ($rules as $rule): ?>
                             <span class="me-3">
-                                <?php echo $rule['emoji'] . ' ' . htmlspecialchars($rule['name']); ?>
+                                <?php echo htmlspecialchars($rule['name']); ?> 
+                                <?php if (!empty($rule['emoji'])): ?>
+                                    <span><?php echo htmlspecialchars($rule['emoji']); ?></span>
+                                <?php endif; ?>
                             </span>
                         <?php endforeach; ?>
                     </div>
@@ -276,16 +267,20 @@ if ($selectedPod) {
                             $targetDisplay = [];
                             if ($selectedRule1) {
                                 $rule1Name = $rules[array_search($selectedRule1, array_column($rules, 'id'))]['name'];
-                                $targetDisplay[] = sprintf("%s: %d/%d",
+                                $rule1Emoji = $rules[array_search($selectedRule1, array_column($rules, 'id'))]['emoji'];
+                                $targetDisplay[] = sprintf("%s %s: %d/%d",
                                     htmlspecialchars($rule1Name),
+                                    htmlspecialchars($rule1Emoji),
                                     ($ruleCounts[$selectedRule1] ?? 0), // Use ruleCounts for achievements
                                     $target1
                                 );
                             }
                             if ($selectedRule2) {
                                 $rule2Name = $rules[array_search($selectedRule2, array_column($rules, 'id'))]['name'];
-                                $targetDisplay[] = sprintf("%s: %d/%d",
+                                $rule2Emoji = $rules[array_search($selectedRule2, array_column($rules, 'id'))]['emoji'];
+                                $targetDisplay[] = sprintf("%s %s: %d/%d",
                                     htmlspecialchars($rule2Name),
+                                    htmlspecialchars($rule2Emoji),
                                     ($ruleCounts[$selectedRule2] ?? 0), // Use ruleCounts for achievements
                                     $target2
                                 );
