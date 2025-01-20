@@ -1,0 +1,15 @@
+.table {
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+.table td, .table th {
+    padding: 0.3rem !important;
+    white-space: nowrap;
+}
+
+.score-input {
+    width: 60px !important;
+    background: #fff !important;
+    color: #000 !important;
+}
