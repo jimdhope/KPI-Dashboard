@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputs = document.querySelectorAll('.score-input');
     const statusDiv = document.getElementById('scoreUpdateStatus');
     const podSelect = document.querySelector('select[name="pod"]');
+    const competitionSelect = document.querySelector('select[name="competition"]');
 
     if (inputs && statusDiv) {
         inputs.forEach(input => {
@@ -9,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 statusDiv.style.display = 'block';
                 statusDiv.className = 'alert alert-info';
                 statusDiv.textContent = 'Updating...';
-
+                
                 try {
-                    const response = await fetch('functions.php', {
+                    const response = await fetch('/public/admin/pages/scores/functions.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             'rule_id': this.dataset.ruleId,
                             'score': this.value,
                             'pod_id': this.dataset.podId,
-                            'competition_id': this.dataset.competitionId,
+                            'competition_id': competitionSelect.value, // Use the selected competition ID
                             'date': document.querySelector('input[name="date"]').value
                         })
                     });
@@ -63,9 +64,22 @@ document.addEventListener('DOMContentLoaded', function() {
         podSelect.addEventListener('change', function() {
             const podId = this.value;
             const date = document.querySelector('input[name="date"]').value;
-
+            const competitionId = competitionSelect.value;
+            
             if (podId) {
-                window.location.href = `scores.php?pod=${podId}&date=${date}`;
+                window.location.href = `index.php?pod=${podId}&date=${date}&competition=${competitionId}`;
+            }
+        });
+    }
+
+    if (competitionSelect) {
+        competitionSelect.addEventListener('change', function() {
+            const competitionId = this.value;
+            const podId = podSelect.value;
+            const date = document.querySelector('input[name="date"]').value;
+            
+            if (competitionId) {
+                window.location.href = `index.php?pod=${podId}&date=${date}&competition=${competitionId}`;
             }
         });
     }

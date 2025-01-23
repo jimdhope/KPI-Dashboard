@@ -40,13 +40,13 @@
                         <li><a class="nav-link" href="/public/admin/pages/teams.php">Teams</a></li>
                         <li><a class="nav-link" href="/public/admin/pages/rules.php">Rules</a></li>
                         <li><a class="nav-link" href="/public/admin/pages/competitions.php">Competitions</a></li>
-                        <li><a class="nav-link" href="/public/admin/pages/scores.php">Scores</a></li>
+                        <li><a class="nav-link" href="/public/admin/pages/scores/index.php">Scores</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <div class="nav-link fw-bold mb-2">Scorecards</div>
                     <ul class="list-unstyled ms-3">
-                        <li><a class="nav-link" href="/public/admin/pages/results.php">Daily Scorecard</a></li>
+                        <li><a class="nav-link" href="/public/admin/pages/daily_scores/index.php">Daily Scorecard</a></li>
                         <li><a class="nav-link" href="/public/admin/pages/weekly_scores/weekly_scores.php">Weekly Scorecard</a></li>
                     </ul>
                 </li>

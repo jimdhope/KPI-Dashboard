@@ -1,11 +1,10 @@
 <?php
-// public/admin/pages/scores/scores.php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/bootstrap.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/public/admin/includes/header.php';
-require_once 'functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/public/admin/pages/scores/functions.php';
 
 // Initialize variables
 $db = Database::getInstance();
@@ -14,41 +13,21 @@ $pageTitle = 'Rules';
 // Debug POST data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     error_log('POST Data: ' . print_r($_POST, true));
-    if (isset($_POST['action']) && $_POST['action'] === 'update_score') {
-        $userId = $_POST['user_id'];
-        $ruleId = $_POST['rule_id'];
-        $score = $_POST['score'];
-        $date = $_POST['date'];
-        $podId = $_POST['pod_id'];
-        $competitionId = $_POST['competition_id'];
-
-        $result = updateDailyScore($db->getConnection(), $userId, $ruleId, $score, $date, $podId, $competitionId);
-        header('Content-Type: application/json');
-        echo json_encode($result);
-        exit();
-    }
 }
 
 // Get selections
 $selectedDate = $_GET['date'] ?? date('Y-m-d');
-$selectedPod = isset($_GET['pod']) ? $_GET['pod'] : 'all';
+$selectedPod = $_GET['pod'] ?? 'all';
+$selectedCompetition = $_GET['competition'] ?? '';
 
 // Get existing scores for the selected date and pod
-$existingScores = [];
-if ($selectedPod && $selectedDate) {
-    $scores = $db->query("
-        SELECT user_id, rule_id, score 
-        FROM daily_scores 
-        WHERE pod_id = ? AND date = ?",
-        [$selectedPod, $selectedDate])->fetchAll(PDO::FETCH_ASSOC);
-    
-    foreach ($scores as $score) {
-        $existingScores[$score['user_id']][$score['rule_id']] = $score['score'];
-    }
-}
+$existingScores = getExistingScores($db, $selectedPod, $selectedDate);
 
 // Fetch pods for dropdown
-$pods = $db->query("SELECT * FROM pods ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+$pods = getPods($db);
+
+// Fetch competitions for dropdown
+$competitions = getCompetitions($db);
 
 // Initialize arrays
 $users = [];
@@ -56,53 +35,49 @@ $rules = [];
 $teamInfo = [];
 
 if ($selectedPod) {
-    $usersQuery = "
-        SELECT DISTINCT u.*, pa.pod_id, p.name as pod_name
-        FROM users u 
-        JOIN pod_assignments pa ON u.id = pa.staff_id
-        JOIN pods p ON pa.pod_id = p.id 
-        WHERE pa.pod_id = ?
-        ORDER BY u.first_name ASC"; // Changed ORDER BY clause to sort by first name in ascending order
-    
-    $users = $db->query($usersQuery, [$selectedPod])->fetchAll(PDO::FETCH_ASSOC);
+    $users = getUsers($db, $selectedPod);
 
     // Get team and competition info for this pod
-    $teamInfo = $db->query("
-        SELECT DISTINCT t.id as team_id, t.name as team_name, c.id as competition_id, c.name as competition_name
-        FROM teams t
-        JOIN competitions c ON t.competition_id = c.id
-        JOIN user_team ut ON ut.team_id = t.id
-        JOIN users u ON u.id = ut.user_id
-        JOIN pod_assignments pa ON pa.staff_id = u.id
-        WHERE pa.pod_id = ?
-        LIMIT 1", 
-        [$selectedPod])->fetch(PDO::FETCH_ASSOC);
+    $teamInfo = getTeamInfo($db, $selectedPod);
     
     // Get competition rules if we found a team
-    if ($teamInfo) {
-        $rules = $db->query("
-            SELECT id, name 
-            FROM competition_rules 
-            WHERE competition_id = ?",
-            [$teamInfo['competition_id']])->fetchAll(PDO::FETCH_ASSOC);
+    if ($selectedCompetition) {
+        $rules = getCompetitionRules($db, $selectedCompetition);
+    }
+}
+
+// Form submission handling
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $scores = $_POST['scores'] ?? [];
+    $podId = intval($_POST['pod_id']);
+    $date = $_POST['date'];
+    $competitionId = $_POST['competition_id'];
+
+    try {
+        saveScores($db, $scores, $podId, $date, $competitionId);
+        header("Location: index.php?pod=$podId&date=$date&competition=$competitionId&message=Scores saved successfully");
+        exit();
+    } catch (Exception $e) {
+        error_log("Score save error: " . $e->getMessage());
+        header("Location: index.php?pod=$podId&date=$date&competition=$competitionId&error=" . urlencode($e->getMessage()));
+        exit();
     }
 }
 ?>
-<title><?php echo $pageTitle; ?></title>
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-<link rel="stylesheet" href="style.css">
+
+<!-- Selection Form -->
 <div class="container py-5">
     <h1 class="mb-4">Score Management</h1>
-   
+
     <form method="GET">
         <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">Date</label>
                 <input type="date" name="date" class="form-control" 
                        value="<?php echo htmlspecialchars($selectedDate); ?>"
                        onchange="this.form.submit()">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">Pod</label>
                 <div class="d-flex">
                     <select name="pod" class="form-select" onchange="this.form.submit()">
@@ -111,6 +86,20 @@ if ($selectedPod) {
                             <option value="<?php echo $pod['id']; ?>" 
                                     <?php echo $selectedPod == $pod['id'] ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($pod['name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Competition</label>
+                <div class="d-flex">
+                    <select name="competition" class="form-select" onchange="this.form.submit()">
+                        <option value="">Select Competition</option>
+                        <?php foreach ($competitions as $competition): ?>
+                            <option value="<?php echo $competition['id']; ?>" 
+                                    <?php echo $selectedCompetition == $competition['id'] ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($competition['name']); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -144,7 +133,7 @@ if ($selectedPod) {
                                     data-user-id="<?php echo $user['id']; ?>"
                                     data-rule-id="<?php echo $rule['id']; ?>"
                                     data-pod-id="<?php echo $selectedPod; ?>"
-                                    data-competition-id="<?php echo $teamInfo['competition_id']; ?>">
+                                    data-competition-id="<?php echo $selectedCompetition; ?>"> <!-- Use the selected competition ID -->
                             </td>
                         <?php endforeach; ?>
                     </tr>
@@ -159,4 +148,6 @@ if ($selectedPod) {
 </div>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/public/admin/includes/footer.php'; ?>
-<script src="scripts.js"></script>
+
+<link rel="stylesheet" href="/public/admin/pages/scores/style.css">
+<script src="/public/admin/pages/scores/scripts.js"></script>
