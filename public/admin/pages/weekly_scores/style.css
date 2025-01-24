@@ -1,0 +1,66 @@
+/* Leaderboard Styles */
+.leaderboard .first-place {
+    color: #9f8f5e;
+}
+
+.leaderboard .second-place {
+    color: #969696;
+}
+
+.leaderboard .third-place {
+    color: #996b4f;
+}
+
+.leaderboard .remaining {
+    color: #50514f;
+}
+
+/* Medal Position Colors */
+.position-1 { background-color: #9f8f5e !important; }
+.position-2 { background-color: #969696 !important; }
+.position-3 { background-color: #996b4f !important; }
+
+.position-1 *, .position-2 *, .position-3 * {
+    color: #ffffff !important;
+}
+
+/* Leaderboard Table Styles */
+.leaderboard-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #444;
+}
+
+/* Team Table Styles */
+.team-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    background-color: #444;
+}
+
+.team-info {
+    flex-grow: 1;
+}
+
+.team-name {
+    font-size: 1.5rem;
+}
+
+.team-members {
+    font-size: 1rem;
+}
+
+.points-cell {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    min-width: 100px;
+}
