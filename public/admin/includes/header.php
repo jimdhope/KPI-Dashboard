@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../../../includes/app_config.php'; // Include the app_config.php file
+?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
@@ -48,6 +51,7 @@
                     <ul class="list-unstyled ms-3">
                         <li><a class="nav-link" href="/public/admin/pages/daily_scores/index.php">Daily Scorecard</a></li>
                         <li><a class="nav-link" href="/public/admin/pages/weekly_scores/index.php">Weekly Scorecard</a></li>
+                        <li><a class="nav-link" href="/public/admin/pages/certs/index.php">Certificates</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

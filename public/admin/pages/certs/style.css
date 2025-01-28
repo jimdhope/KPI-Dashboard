@@ -1,17 +1,46 @@
-/* Certificate Styles */
-.certificate {
-    border: 2px solid #000;
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    border-radius: 10px;
-    background-color: #fff;
+.certificate-form {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.certificate h2 {
-    margin-bottom: 10px;
+.form-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
 }
 
-.certificate p {
-    margin-bottom: 5px;
+.winners-section {
+    background-color: #f8f9fa;
+}
+
+.team-members-select {
+    min-height: 150px;
+}
+
+select[multiple] {
+    height: 200px;
+}
+
+.form-footer {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+.alert {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
 }

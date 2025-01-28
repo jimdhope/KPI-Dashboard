@@ -1442,3 +1442,212 @@
 [03-Jan-2025 09:16:37 UTC] Attempting to load class: ConfigManager from C:\Users\JamesHope\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
 [03-Jan-2025 09:16:37 UTC] Bootstrap: Settings loaded
 [03-Jan-2025 09:16:37 UTC] Bootstrap: Session started
+[24-Jan-2025 13:04:58 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:04:58 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:04:58 Europe/Berlin] Database Connection Error: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for DB HOST failed: No such host is known. 
+[24-Jan-2025 13:04:58 Europe/Berlin] Bootstrap Error: Database connection failed
+[24-Jan-2025 13:04:58 Europe/Berlin] Stack trace: #0 C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\includes\classes\Database.php(22): Database->__construct()
+#1 C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\includes\bootstrap.php(42): Database::getInstance()
+#2 C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php(5): require_once('C:\\Users\\JamesH...')
+#3 {main}
+[24-Jan-2025 13:07:13 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:07:13 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:07:13 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:07:13 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:07:13 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:07:13 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:07:13 Europe/Berlin] PHP Warning:  require_once(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs/../../weekly_scores/functions.php): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:07:13 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs/../../weekly_scores/functions.php' (include_path='C:\xampp\php\PEAR') in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php:6
+Stack trace:
+#0 {main}
+  thrown in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:07:33 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:07:33 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:07:33 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:07:33 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:07:33 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:07:33 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:07:33 Europe/Berlin] PHP Warning:  require_once(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:07:33 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php' (include_path='C:\xampp\php\PEAR') in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php:6
+Stack trace:
+#0 {main}
+  thrown in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:09:15 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:09:15 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:09:15 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:09:15 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:09:15 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:09:15 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:09:15 Europe/Berlin] PHP Warning:  require_once(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:09:15 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php' (include_path='C:\xampp\php\PEAR') in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php:6
+Stack trace:
+#0 {main}
+  thrown in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:09:45 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:09:45 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:09:45 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:09:45 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:09:45 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:09:45 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:09:45 Europe/Berlin] PHP Warning:  require_once(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:09:45 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php' (include_path='C:\xampp\php\PEAR') in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php:6
+Stack trace:
+#0 {main}
+  thrown in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:16:13 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:16:13 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:16:13 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:16:13 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:16:13 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:16:13 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:16:13 Europe/Berlin] PHP Warning:  require_once(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs/../../weekly_scores/functions.php): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:16:13 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs/../../weekly_scores/functions.php' (include_path='C:\xampp\php\PEAR') in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php:6
+Stack trace:
+#0 {main}
+  thrown in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:16:31 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:16:31 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:16:31 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:16:31 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:16:31 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:16:31 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:16:31 Europe/Berlin] PHP Warning:  require_once(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:16:31 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certsfunctions.php' (include_path='C:\xampp\php\PEAR') in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php:6
+Stack trace:
+#0 {main}
+  thrown in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php on line 6
+[24-Jan-2025 13:16:39 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:16:39 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:16:39 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:16:39 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:16:39 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:16:39 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:16:39 Europe/Berlin] PHP Warning:  require_once(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\includes/../../../app_config.php): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\includes\header.php on line 2
+[24-Jan-2025 13:16:39 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\includes/../../../app_config.php' (include_path='C:\xampp\php\PEAR') in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\includes\header.php:2
+Stack trace:
+#0 C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\index.php(11): require_once()
+#1 {main}
+  thrown in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\includes\header.php on line 2
+[24-Jan-2025 13:17:45 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:17:45 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:17:45 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:17:45 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:17:45 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:17:45 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:17:56 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:17:56 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:17:56 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:17:56 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:17:56 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:17:56 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:18:00 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:18:00 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:18:00 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:18:00 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:18:00 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:18:00 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:20:32 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:20:32 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:20:32 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:20:32 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:20:32 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:20:32 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:20:59 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:20:59 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:20:59 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:20:59 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:20:59 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:20:59 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 13:21:36 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 13:21:36 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 13:21:36 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 13:21:36 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 13:21:36 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 13:21:36 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:08:44 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:08:44 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:08:44 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:08:44 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:08:44 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:08:44 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:08:47 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:08:47 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:08:47 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:08:47 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:08:47 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:08:47 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:09:26 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:09:26 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:09:26 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:09:26 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:09:26 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:09:26 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:15:07 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:15:07 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:15:07 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:15:07 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:15:07 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:15:07 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:15:18 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:15:18 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:15:18 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:15:18 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:15:18 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:15:18 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:51:55 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:51:55 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:51:55 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:51:55 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:51:55 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:51:55 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:51:55 Europe/Berlin] PHP Warning:  file_put_contents(C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs/output/Team_certificate.svg): Failed to open stream: No such file or directory in C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot\public\admin\pages\certs\functions.php on line 90
+[24-Jan-2025 14:53:49 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:53:49 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:53:49 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:53:49 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:53:49 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:53:49 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:54:00 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:54:00 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:54:00 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:54:00 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:54:00 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:54:00 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:54:50 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:54:50 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:54:50 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:54:50 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:54:50 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:54:50 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:55:01 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:55:01 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:55:01 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:55:01 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:55:01 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:55:01 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:55:01 Europe/Berlin] Attempting to load class: Imagick from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
+[24-Jan-2025 14:55:01 Europe/Berlin] Class file not found: C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
+[24-Jan-2025 14:55:11 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:55:11 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:55:11 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:55:11 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:55:11 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:55:11 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:55:11 Europe/Berlin] Attempting to load class: Imagick from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
+[24-Jan-2025 14:55:11 Europe/Berlin] Class file not found: C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
+[24-Jan-2025 14:55:13 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 14:55:13 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 14:55:13 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 14:55:13 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 14:55:13 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 14:55:13 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 14:55:13 Europe/Berlin] Attempting to load class: Imagick from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
+[24-Jan-2025 14:55:13 Europe/Berlin] Class file not found: C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
+[24-Jan-2025 15:02:23 Europe/Berlin] Bootstrap: Starting initialization
+[24-Jan-2025 15:02:23 Europe/Berlin] Attempting to load class: Database from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Database.php
+[24-Jan-2025 15:02:23 Europe/Berlin] Bootstrap: Database connected
+[24-Jan-2025 15:02:23 Europe/Berlin] Attempting to load class: ConfigManager from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/ConfigManager.php
+[24-Jan-2025 15:02:23 Europe/Berlin] Bootstrap: Settings loaded
+[24-Jan-2025 15:02:23 Europe/Berlin] Bootstrap: Session started
+[24-Jan-2025 15:02:23 Europe/Berlin] Attempting to load class: Imagick from C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
+[24-Jan-2025 15:02:23 Europe/Berlin] Class file not found: C:\Users\JamesHope\OneDrive - JABI UK\Documents\Web\Projects\KPI Tracker\localhost\webroot/includes/classes/Imagick.php
